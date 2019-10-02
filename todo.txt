@@ -1,0 +1,15 @@
+hi celeste :)
+
+[] js stuff
+    [] figure out how to create a item/module
+    [] adding item
+    [] getting correct items back
+    []
+[] css stuff
+    [] mobile first !!!!!!!!!!! tbh
+    [] white, grey, black, vogue-esque fonts
+    [] have modules be masonry-ish with grid
+        https://medium.com/@andybarefoot/a-masonry-style-layout-using-css-grid-8c663d355ebb
+[] html stuff
+    [] buttons for adding, hambaga menu, sorting, category
+    [] side menu
