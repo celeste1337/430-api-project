@@ -1,3 +1,5 @@
+"use strict";
+
 const handleResponse = (xhr) => {
     const content = document.querySelector('#content');
 
@@ -47,45 +49,42 @@ const requestUpdate = (e, totalPage) => {
     //request stuff, request method and the url (/getUsers, etc)
     const doAction = totalPage.getAttribute('action');
     const doMethod = totalPage.getAttribute('method');
+    const encodingType = totalPage.getAttribute('enctype');
 
     //non dropdown inputs
     const nameField = document.querySelector('#nameField').value;
     const costField = document.querySelector('#costField').value;
-    
-    //stuff for images ! i think
-    const imageField = document.querySelector("#imageField").src;
 
-    //dropdowns
-    const page = document.querySelector('#urlField').value;
-    const method = document.querySelector('#methodSelect').value;
+    //stuff for images ! i think
+    const imageData = document.querySelector("#image-input").files[0];
+
+    //dropdown for sorting
+    const sortBy = document.querySelector('#sortBy').value;
+
+    //dropdown for initial picking category
+    const selectCategory = document.querySelector('#selectCategory').value;
 
     const xhr = new XMLHttpRequest();
 
-    //get user
-    if (e.target.id === 'userForm') {
-        xhr.open(method, page);
+    xhr.open(doAction, doMethod);
 
-        xhr.setRequestHeader('Content-type', 'application/json');
-        xhr.setRequestHeader('Accept', 'application/json');
+    xhr.setRequestHeader('Content-type', encodingType);
+    xhr.setRequestHeader('Accept', 'application/json');
 
-        xhr.onload = () => handleResponse(xhr);
+    console.log(xhr);
 
-        xhr.send();
-        console.log("sent");
-    } else if (e.target.id === 'nameForm') {
-        xhr.open('POST', '/addUsers');
-
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.setRequestHeader('Accept', 'application/json');
-
-        //
-        console.log(xhr);
-
-        const formData = `name=${nameField}&age=${ageField}`;
-        xhr.send(formData);
-        console.log("sent");
-        xhr.onload = () => handleResponse(xhr);
+    //ok do picture stuff like in here somehow . good luck
+    if(doMethod == "POST") {
+        const formData = `name=${nameField}&cost=${costField}`;
+        xhr.send(formData, imageData);
     }
+    else {
+        xhr.send();
+    }
+    
+    console.log("sent");
+    xhr.onload = () => handleResponse(xhr);
+
 
     e.preventDefault();
     //prevents DOM event bubbling

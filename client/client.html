@@ -35,11 +35,9 @@
         <div id="addMenu">
             <!--menu/form to add things-->
             <h3>Add Item</h3>
-            <form id="addForm" action="/addUserItem" method="post">
+            <form id="addForm" action="/addUserItem" method="post" enctype="multipart/form-data">
                 <!--event listener here :)-->
                 <input type="file" accept="image/*" id="image-input">
-                <!--drag n drop guy for bigger screens, add an event listener here-->
-                <div id="dragNDrop">Drag an image into me!! Please...</div>
                 <label for="name">Name: </label>
                 <input id="nameField" type="text" name="name" />
                 <label for="cost">Cost: </label>
@@ -56,6 +54,7 @@
 
             </form>
         </div>
+        <div id="content"></div>
     </div>
 </body>
 

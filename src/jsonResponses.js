@@ -1,3 +1,12 @@
+"use strict";
+ // pull in the file system module
+const fs = require('fs');
+
+//for image stuff
+const path = require('path');
+const staticBasePath = './hosted';
+const htmlHandler = require('./htmlResponses.js');
+
 //this will hold the closet of the users
 const userClosets = {};
 
@@ -49,7 +58,7 @@ const notFound = (request, response) => {
   respondJSON(request, response, 404, responseJSON);
 };
 
-const getUserCloset = (request, response) => {
+const getUserClosets = (request, response) => {
   // should default to good
   const responseJSON = {
     userCloset,
@@ -63,7 +72,7 @@ const addUserItem = (request, response, body) => {
     message: 'image, name, and cost are required!!',
   };
 
-  if (!body.image || !body.name || !body.cost) {
+  if (!body.name || !body.cost) {
     respondJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);
   }
@@ -78,8 +87,13 @@ const addUserItem = (request, response, body) => {
   }
 
   userCloset[body.name].name = body.name;
-  userCloset[body.name].image = body.image;
   userCloset[body.name].cost = body.cost;
+
+  //IMAGE STUFF ? USING FILE SYNC ?
+  if(body.image) {
+    
+  }
+
 
   if (responseCode === 201) {
     responseJSON.message = 'created successfully!';
@@ -106,7 +120,7 @@ module.exports = {
     success,
     badRequest,
     notFound,
-    getUserCloset,
+    getUserClosets,
     addUserItem,
     notReal,
 };
