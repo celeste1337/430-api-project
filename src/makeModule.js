@@ -57,6 +57,8 @@ const requestUpdate = (e, totalPage) => {
 
     //stuff for images ! i think
     const imageData = document.querySelector("#image-input").files[0];
+    console.log(imageData);
+    
 
     //dropdown for sorting
     const sortBy = document.querySelector('#sortBy').value;
@@ -74,8 +76,9 @@ const requestUpdate = (e, totalPage) => {
     console.log(xhr);
 
     //ok do picture stuff like in here somehow . good luck
-    if(doMethod == "POST") {
-        const formData = `name=${nameField}&cost=${costField}`;
+    if(doMethod === "post") {
+        const formData = `name=${nameField}&cost=${costField}&category=${selectCategory}`;
+        console.log(imageData);
         xhr.send(formData, imageData);
     }
     else {

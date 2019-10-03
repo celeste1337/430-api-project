@@ -75,8 +75,8 @@ const handleImagePost = (request, response) => {
   request.on('end', () => {
     const buffer = Buffer.concat(body);
 
-    fs.writeFile(staticBasePath, buffer, function(err) {
-      if(err) throw err;
+    fs.writeFile(staticBasePath, buffer, function (err) {
+      if (err) throw err;
       console.log("saved");
     })
     jsonHandler.addUserClosets(request, res, bodyParams);
@@ -84,18 +84,31 @@ const handleImagePost = (request, response) => {
 }
 
 const onRequest = (request, response) => {
+  if (request.method === 'POST') {
+    console.log(request);
+  }
+
   const parsedUrl = url.parse(request.url);
   const params = parsedUrl.query;
 
-  console.log(parsedUrl.pathname);
-
-  if (request.method === 'POST' && parsedUrl.pathname === '/addUserItem') {
-    handlePost(request, response, parsedUrl);
-  } else if (urlStruct[request.method][parsedUrl.pathname]) {
+  if (urlStruct[request.method][parsedUrl.pathname]) {
     urlStruct[request.method][parsedUrl.pathname](request, response, params);
   } else {
     urlStruct.GET.notFound(request, response);
   }
+  /*
+    const parsedUrl = url.parse(request.url);
+    const params = parsedUrl.query;
+  
+    console.log(parsedUrl.pathname);
+  
+    if (request.method === 'POST' && parsedUrl.pathname === '/addUserItem') {
+      handlePost(request, response, parsedUrl);
+    } else if (urlStruct[request.method][parsedUrl.pathname]) {
+      urlStruct[request.method][parsedUrl.pathname](request, response, params);
+    } else {
+      urlStruct.GET.notFound(request, response);
+    } */
 };
 
 http.createServer(onRequest).listen(port);
