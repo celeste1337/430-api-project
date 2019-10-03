@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,16 +10,53 @@
     <link rel="stylesheet" type="text/css" href="/style.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <script src="../src/makeModule.js"></script>
 </head>
+
 <body>
     <div id="totalPage">
         <h1>HELLO STINKY</h1>
         <div id="sideMenu">
-            <p>imagine this as the side menu that is hidden. thanks</p>
+            <!--menu/form for sorting all the stuff bruhaps-->
+            <!--honestly this will probably just be a bunch of buttons and maybe a dropdown 100 100 100-->
+            <h3>Return categories</h3>
+            <form id="sortForm" action="/getUserCloset" method="get">
+                <select name="sortBy" id="sortBy">
+                    <option value="tops">Tops</option>
+                    <option value="bottoms">Bottoms</option>
+                    <option value="onePieces">One Pieces</option>
+                    <option value="shoes">Shoes</option>
+                    <option value="accessories">Accessories</option>
+                    <option value="outerwear">Outerwear</option>
+                </select>
+                <input type="submit" value="Sort">
+            </form>
         </div>
         <div id="addMenu">
-            <p>imagine this as the menu to add a new thing</p>
+            <!--menu/form to add things-->
+            <h3>Add Item</h3>
+            <form id="addForm" action="/addUserItem" method="post">
+                <!--event listener here :)-->
+                <input type="file" accept="image/*" id="image-input">
+                <!--drag n drop guy for bigger screens, add an event listener here-->
+                <div id="dragNDrop">Drag an image into me!! Please...</div>
+                <label for="name">Name: </label>
+                <input id="nameField" type="text" name="name" />
+                <label for="cost">Cost: </label>
+                <input id="costField" type="number" name="cost" min="0" max="500" step="1" />
+                <select name="selectCategory" id="selectCategory">
+                    <option value="tops">Top</option>
+                    <option value="bottoms">Bottom</option>
+                    <option value="onePieces">One Piece</option>
+                    <option value="shoes">Shoe</option>
+                    <option value="accessories">Accessory</option>
+                    <option value="outerwear">Outerwear</option>
+                </select>
+                <input type="submit" value="Add Item" />
+
+            </form>
         </div>
     </div>
 </body>
+
 </html>

@@ -43,7 +43,7 @@ const urlStruct = {
       const bodyString = Buffer.concat(body).toString();
       const bodyParams = query.parse(bodyString);
   
-      jsonHandler.addUsers(request, res, bodyParams);
+      jsonHandler.addUserClosets(request, res, bodyParams);
     });
   };
   

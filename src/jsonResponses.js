@@ -1,4 +1,4 @@
-//this will hold all the "closets" of the users
+//this will hold the closet of the users
 const userClosets = {};
 
 const respondJSON = (request, response, status, object) => {
@@ -49,35 +49,37 @@ const notFound = (request, response) => {
   respondJSON(request, response, 404, responseJSON);
 };
 
-const getUserClosets = (request, response) => {
+const getUserCloset = (request, response) => {
   // should default to good
   const responseJSON = {
-    userClosets,
+    userCloset,
   };
 
   respondJSON(request, response, 200, responseJSON);
 };
 
-const addUserClosets = (request, response, body) => {
+const addUserItem = (request, response, body) => {
   const responseJSON = {
-    message: 'name n age r required',
+    message: 'image, name, and cost are required!!',
   };
 
-  if (!body.name || !body.age) {
+  if (!body.image || !body.name || !body.cost) {
     respondJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);
   }
 
   let responseCode = 201;
 
-  if (userClosets[body.name]) {
+  //item name does it all i guess
+  if (userCloset[body.name]) {
     responseCode = 204;
   } else {
-    userClosets[body.name] = {};
+    userCloset[body.name] = {};
   }
 
-  userClosets[body.name].name = body.name;
-  userClosets[body.name].age = body.age;
+  userCloset[body.name].name = body.name;
+  userCloset[body.name].image = body.image;
+  userCloset[body.name].cost = body.cost;
 
   if (responseCode === 201) {
     responseJSON.message = 'created successfully!';
@@ -104,7 +106,7 @@ module.exports = {
     success,
     badRequest,
     notFound,
-    getUserClosets,
-    addUserClosets,
+    getUserCloset,
+    addUserItem,
     notReal,
 };
