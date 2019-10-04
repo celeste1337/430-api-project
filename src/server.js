@@ -4,7 +4,7 @@ const url = require('url');
 const query = require('querystring');
 
 const fs = require('fs');
-// const path = require('path');
+const path = require('path');
 const htmlHandler = require('./htmlResponses.js');
 const jsonHandler = require('./jsonResponses.js');
 
@@ -59,6 +59,12 @@ const handlePost = (request, response) => {
 };
 
 const handleImagePost = (request, response) => {
+  const basePath = path.resolve(staticBasePath);
+  const normalizedPath = path.normalize(request.url);
+  const reaplacedPath = normalizedPath.replace(/^(\.\.[\/\\])+/, '');
+
+  const finalFileLocation = path.join(basePath, reaplacedPath);
+
   const res = response;
   const body = [];
 
@@ -75,11 +81,11 @@ const handleImagePost = (request, response) => {
   request.on('end', () => {
     const buffer = Buffer.concat(body);
 
-    fs.writeFile(staticBasePath, buffer, (err) => {
+    fs.writeFile(finalFileLocation, buffer, 'binary', (err) => {
       if (err) throw err;
       console.log('saved');
     });
-    jsonHandler.addUserClosets(request, res, bodyParams);
+    //jsonHandler.addUserClosets(request, res, bodyParams);
   });
 };
 
@@ -87,15 +93,10 @@ const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
   const params = parsedUrl.query;
 
-  if (urlStruct[request.method][parsedUrl.pathname]) {
-    urlStruct[request.method][parsedUrl.pathname](request, response, params);
-  } else {
-    urlStruct.GET.notFound(request, response);
-  }
-
-
   if (request.method === 'POST' && parsedUrl.pathname === '/addUserItem') {
     handlePost(request, response, parsedUrl);
+  } else if (parsedUrl.pathname === '/addUserItemImage') {
+    handleImagePost(request, response);
   } else if (urlStruct[request.method][parsedUrl.pathname]) {
     urlStruct[request.method][parsedUrl.pathname](request, response, params);
   } else {
