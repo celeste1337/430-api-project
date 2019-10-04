@@ -47,6 +47,9 @@ const handleResponse = (xhr) => {
 const requestUpdate = (e, totalPage) => {
     console.log("request update called");
     //request stuff, request method and the url (/getUsers, etc)
+    //USING FORM DATA API TO UPLOAD FILE !
+    const formDataTotal = new FormData();
+
     const doAction = totalPage.getAttribute('action');
     const doMethod = totalPage.getAttribute('method');
     const encodingType = totalPage.getAttribute('enctype');
@@ -58,7 +61,6 @@ const requestUpdate = (e, totalPage) => {
     //stuff for images ! i think
     const imageData = document.querySelector("#image-input").files[0];
     console.log(imageData);
-    
 
     //dropdown for sorting
     const sortBy = document.querySelector('#sortBy').value;
@@ -73,19 +75,22 @@ const requestUpdate = (e, totalPage) => {
     xhr.setRequestHeader('Content-type', encodingType);
     xhr.setRequestHeader('Accept', 'application/json');
 
-    console.log(xhr);
-
     //ok do picture stuff like in here somehow . good luck
     if(doMethod === "post") {
         const formData = `name=${nameField}&cost=${costField}&category=${selectCategory}`;
+
         console.log(imageData);
-        xhr.send(formData, imageData);
+        formDataTotal.append(formData);
+        formDataTotal.append(imageData);
+        xhr.send(formDataTotal);
+        console.log("sent");
     }
     else {
         xhr.send();
+        console.log("sent");
     }
     
-    console.log("sent");
+    
     xhr.onload = () => handleResponse(xhr);
 
 
