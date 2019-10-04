@@ -1,17 +1,17 @@
-"use strict";
 
 const http = require('http');
 const url = require('url');
 const query = require('querystring');
 
+const fs = require('fs');
+// const path = require('path');
 const htmlHandler = require('./htmlResponses.js');
 const jsonHandler = require('./jsonResponses.js');
 
 // pull in the file system module
-const fs = require('fs');
 
-//for image
-const path = require('path');
+// for image
+
 const staticBasePath = './hosted';
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
@@ -75,19 +75,15 @@ const handleImagePost = (request, response) => {
   request.on('end', () => {
     const buffer = Buffer.concat(body);
 
-    fs.writeFile(staticBasePath, buffer, function (err) {
+    fs.writeFile(staticBasePath, buffer, (err) => {
       if (err) throw err;
-      console.log("saved");
-    })
+      console.log('saved');
+    });
     jsonHandler.addUserClosets(request, res, bodyParams);
   });
-}
+};
 
 const onRequest = (request, response) => {
-  if (request.method === 'POST') {
-    console.log(request);
-  }
-
   const parsedUrl = url.parse(request.url);
   const params = parsedUrl.query;
 
@@ -96,19 +92,15 @@ const onRequest = (request, response) => {
   } else {
     urlStruct.GET.notFound(request, response);
   }
-  /*
-    const parsedUrl = url.parse(request.url);
-    const params = parsedUrl.query;
-  
-    console.log(parsedUrl.pathname);
-  
-    if (request.method === 'POST' && parsedUrl.pathname === '/addUserItem') {
-      handlePost(request, response, parsedUrl);
-    } else if (urlStruct[request.method][parsedUrl.pathname]) {
-      urlStruct[request.method][parsedUrl.pathname](request, response, params);
-    } else {
-      urlStruct.GET.notFound(request, response);
-    } */
+
+
+  if (request.method === 'POST' && parsedUrl.pathname === '/addUserItem') {
+    handlePost(request, response, parsedUrl);
+  } else if (urlStruct[request.method][parsedUrl.pathname]) {
+    urlStruct[request.method][parsedUrl.pathname](request, response, params);
+  } else {
+    urlStruct.GET.notFound(request, response);
+  }
 };
 
 http.createServer(onRequest).listen(port);

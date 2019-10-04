@@ -1,37 +1,37 @@
-"use strict";
- // pull in the file system module
+// pull in the file system module
 const fs = require('fs');
 
-//for image stuff
+// for image stuff
 const path = require('path');
+
 const staticBasePath = './hosted';
 const htmlHandler = require('./htmlResponses.js');
 
-//this will hold the closet of the users
+// this will hold the closet of the users
 const userClosets = {};
 
 const respondJSON = (request, response, status, object) => {
-    response.writeHead(status, { 'Content-Type': 'application/json' });
-    response.write(JSON.stringify(object));
-    response.end();
+  response.writeHead(status, { 'Content-Type': 'application/json' });
+  response.write(JSON.stringify(object));
+  response.end();
 };
 
 const respondJSONMeta = (request, response, status, type) => {
-    const headers = {
-        'Content-Type': type,
-    };
+  const headers = {
+    'Content-Type': type,
+  };
 
-    response.writeHead(status, headers);
-    response.end();
+  response.writeHead(status, headers);
+  response.end();
 };
 
 const success = (request, response) => {
-    const responseJSON = {
-        message: 'This is a successful response',
-    };
+  const responseJSON = {
+    message: 'This is a successful response',
+  };
 
-    respondJSON(request, response, 200, responseJSON);
-}
+  respondJSON(request, response, 200, responseJSON);
+};
 
 const getSuccessMeta = (request, response, type) => respondJSONMeta(request, response, 200, type);
 
@@ -61,7 +61,7 @@ const notFound = (request, response) => {
 const getUserClosets = (request, response) => {
   // should default to good
   const responseJSON = {
-    userCloset,
+    userClosets,
   };
 
   respondJSON(request, response, 200, responseJSON);
@@ -79,7 +79,7 @@ const addUserItem = (request, response, body) => {
 
   let responseCode = 201;
 
-  //item name does it all i guess
+  // item name does it all i guess
   if (userCloset[body.name]) {
     responseCode = 204;
   } else {
@@ -89,8 +89,8 @@ const addUserItem = (request, response, body) => {
   userCloset[body.name].name = body.name;
   userCloset[body.name].cost = body.cost;
 
-  //IMAGE STUFF ? USING FILE SYNC ?
-  if(body.image) {
+  // IMAGE STUFF ? USING FILE SYNC ?
+  if (body.image) {
     
   }
 
@@ -117,10 +117,10 @@ const notReal = (request, response) => {
 
 
 module.exports = {
-    success,
-    badRequest,
-    notFound,
-    getUserClosets,
-    addUserItem,
-    notReal,
+  success,
+  badRequest,
+  notFound,
+  getUserClosets,
+  addUserItem,
+  notReal,
 };
