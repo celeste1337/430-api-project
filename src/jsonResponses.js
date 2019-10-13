@@ -1,12 +1,3 @@
-// pull in the file system module
-const fs = require('fs');
-
-// for image stuff
-const path = require('path');
-
-const staticBasePath = './hosted';
-const htmlHandler = require('./htmlResponses.js');
-
 // this will hold the closet of the users
 const userClosets = {};
 
@@ -80,20 +71,16 @@ const addUserItem = (request, response, body) => {
   let responseCode = 201;
 
   // item name does it all i guess
-  if (userCloset[body.name]) {
+  if (userClosets[body.name]) {
     responseCode = 204;
   } else {
-    userCloset[body.name] = {};
+    userClosets[body.name] = {};
   }
 
-  userCloset[body.name].name = body.name;
-  userCloset[body.name].cost = body.cost;
-
-  // IMAGE STUFF ? USING FILE SYNC ?
-  if (body.image) {
-    
-  }
-
+  userClosets[body.name].name = body.name;
+  userClosets[body.name].cost = body.cost;
+  userClosets[body.name].category = body.category;
+  userClosets[body.name].url = body.url;
 
   if (responseCode === 201) {
     responseJSON.message = 'created successfully!';
@@ -104,6 +91,9 @@ const addUserItem = (request, response, body) => {
 
   return respondJSONMeta(request, response, responseCode);
 };
+
+const addItemMeta = (request, response, type) => respondJSONMeta(request, response, 200, type);
+
 
 const notReal = (request, response) => {
   // should default to good
@@ -122,5 +112,6 @@ module.exports = {
   notFound,
   getUserClosets,
   addUserItem,
+  addItemMeta,
   notReal,
 };

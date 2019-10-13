@@ -10,54 +10,161 @@
     <link rel="stylesheet" type="text/css" href="/style.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
-    <script src="../src/makeModule.js"></script>
+
 </head>
 
 <body>
+    <script>
+        const handleResponse = (xhr) => {
+            const content = document.querySelector('#content');
+
+            switch (xhr.status) {
+                case 200:
+                    content.innerHTML = '<b>success</b>';
+                    break;
+                case 201:
+                    content.innerHTML = '<b>created</b>';
+                    break;
+                case 400:
+                    content.innerHTML = '<b>bad request</b>';
+                    break;
+                case 404:
+                    content.innerHTML = '<b>not found quirky gorl</b>';
+                    break;
+                case 401:
+                    content.innerHTML = '<b>unauthorized .</b>';
+                    break;
+                case 403:
+                    content.innerHTML = '<b>FORBIDDEN</b>';
+                    break;
+                case 500:
+                    content.innerHTML = '<b>internal error <3</b>';
+                    break;
+                case 501:
+                    content.innerHTML = '<b>not implemeneted :)</b>';
+                    break;
+                default:
+                    content.innerHTML = '<b>we didnt implement this sozzz</b>';
+                    break;
+            }
+            console.log(xhr.response);
+
+            if (xhr.response) {
+                const obj = xhr.response;
+                console.log(obj);
+
+                content.innerHTML += `<p>${obj}</p>`;
+            } else {
+                content.innerHTML += '<p>there are none/this is probably a HEAD call</p>';
+            }
+        };
+
+        const requestUpdate = (e, totalPage) => {
+            console.log('request update called');
+            //console.log(totalPage);
+            // request stuff, request method and the url (/getUsers, etc)
+            const doAction = e.target.getAttribute('action');
+            const doMethod = e.target.getAttribute('method');
+
+            // non dropdown inputs
+            const urlField = document.querySelector('#urlField').value;
+            const nameField = document.querySelector('#nameField').value;
+            const costField = document.querySelector('#costField').value;
+
+            // dropdown for sorting
+            const sortBy = document.querySelector('#sortBy').value;
+
+            // dropdown for initial picking category
+            const selectCategory = document.querySelector('#selectCategory').value;
+
+            const xhr = new XMLHttpRequest();
+
+            xhr.open(doAction, doMethod);
+
+            // ok do picture stuff like in here somehow . good luck
+            if (doAction === '/addUserItem') {
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+                xhr.setRequestHeader('Accept', 'application/json');
+
+                const formData = `name=${nameField}&cost=${costField}&category=${selectCategory}&url=${urlField}`;
+                console.log(formData);
+
+                xhr.send(formData);
+                console.log('sent post request');
+            } else {
+                xhr.setRequestHeader('Content-type', 'application/json');
+                xhr.setRequestHeader('Accept', 'application/json');
+                xhr.send();
+                console.log('sent');
+            }
+
+
+            xhr.onload = () => handleResponse(xhr);
+
+
+            e.preventDefault();
+            // prevents DOM event bubbling
+            return false;
+        };
+
+        const init = () => {
+            const totalPage = document.querySelector('#totalPage');
+            const addForm = document.querySelector('#addForm');
+            const sortForm = document.querySelector('#sortForm');
+
+            console.log('init');
+            const getResponses = (e) => requestUpdate(e, totalPage);
+
+            // event listeners for the submit button and add button
+            addForm.addEventListener('submit', getResponses);
+            sortForm.addEventListener('submit', getResponses);
+        };
+
+        window.onload = init;
+
+    </script>
     <div id="totalPage">
-        <h1>do not forget to change this title PLEASE god</h1>
-        <div id="sideMenu">
-            <!--menu/form for sorting all the stuff bruhaps-->
-            <!--honestly this will probably just be a bunch of buttons and maybe a dropdown 100 100 100-->
-            <h3>Return categories</h3>
-            <form id="sortForm" action="/getUserCloset" method="get">
-                <select name="sortBy" id="sortBy">
-                    <option value="tops">Tops</option>
-                    <option value="bottoms">Bottoms</option>
-                    <option value="onePieces">One Pieces</option>
-                    <option value="shoes">Shoes</option>
-                    <option value="accessories">Accessories</option>
-                    <option value="outerwear">Outerwear</option>
-                </select>
-                <input type="submit" value="Sort">
-            </form>
-        </div>
-        <div id="addMenu">
-            <!--menu/form to add things-->
-            <h3>Add Item</h3>
-            <form id="addForm" action="/addUserItem" method="post">
-                <!--event listener here :)-->
-                <label for="name">Name: </label>
-                <input id="nameField" type="text" name="name" />
-                <label for="cost">Cost: </label>
-                <input id="costField" type="number" name="cost" min="0" max="500" step="1" />
-                <select name="selectCategory" id="selectCategory">
-                    <option value="tops">Top</option>
-                    <option value="bottoms">Bottom</option>
-                    <option value="onePieces">One Piece</option>
-                    <option value="shoes">Shoe</option>
-                    <option value="accessories">Accessory</option>
-                    <option value="outerwear">Outerwear</option>
-                </select>
-                <input type="submit" value="Add Item" />
-            </form>
-            <form id="addPicForm" action="/addUserItemImage" method="post" enctype="multipart/form-data">
-                <input type="file" accept="image/*" id="image-input">
-                <input type="submit" value="Add Item Image" />
-            </form>
-        </div>
-        <div id="content"></div>
+        <h1>hi celeste</h1>
+        <!--menu/form for sorting all the stuff bruhaps-->
+        <!--honestly this will probably just be a bunch of buttons and maybe a dropdown 100 100 100-->
+        <h3>Return categories</h3>
+        <form id="sortForm" action="/getUserClosets" method="GET">
+            <select name="sortBy" id="sortBy">
+                <option value="tops">Tops</option>
+                <option value="bottoms">Bottoms</option>
+                <option value="onePieces">One Pieces</option>
+                <option value="shoes">Shoes</option>
+                <option value="accessories">Accessories</option>
+                <option value="outerwear">Outerwear</option>
+            </select>
+            <input type="submit" value="Sort" />
+        </form>
+        <!--menu/form to add things-->
+        <h3>Add Item</h3>
+        <form id="addForm" action="/addUserItem" method="POST">
+            <!--event listener here :)-->
+            <input id="urlField" type="text" name="imgUrl" placeholder="Image URL">
+            <label for="name">Name: </label>
+            <input id="nameField" type="text" name="name" />
+            <label for="cost">Cost: </label>
+            <input id="costField" type="number" name="cost" min="0" max="1000" step="1" />
+            <select name="selectCategory" id="selectCategory">
+                <option value="tops">Top</option>
+                <option value="bottoms">Bottom</option>
+                <option value="onePieces">One Piece</option>
+                <option value="shoes">Shoe</option>
+                <option value="accessories">Accessory</option>
+                <option value="outerwear">Outerwear</option>
+            </select>
+            <input type="submit" value="Add Item" />
+        </form>
     </div>
+
+    <div id="content"></div>
+
+
+
 </body>
 
 </html>
