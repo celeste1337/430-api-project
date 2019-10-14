@@ -10,7 +10,6 @@
     <link rel="stylesheet" type="text/css" href="/style.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
-
 </head>
 
 <body>
@@ -47,17 +46,53 @@
                     content.innerHTML = '<b>we didnt implement this sozzz</b>';
                     break;
             }
-            console.log(xhr.response);
 
             if (xhr.response) {
-                const obj = xhr.response;
-                console.log(obj);
-
-                content.innerHTML += `<p>${obj}</p>`;
+                const obj = JSON.parse(xhr.response);
+                makeModule(obj);
             } else {
-                content.innerHTML += '<p>there are none/this is probably a HEAD call</p>';
+                content.innerHTML += 'Something has gone horribly wrong!';
             }
         };
+
+        const makeModule = (obj) => {
+
+            let actualObject = obj[Object.keys(obj)];
+
+            actualObject = Object.values(actualObject);
+            //grab parent so we can attach it at the end
+            for (let i = 0; i < actualObject.length; i++) {
+                //throw everything in this thing
+                //see if it exists already, prev duplicates
+                let checkMe = document.querySelector(`#${actualObject[i].name}`);
+
+                if (checkMe == null) {
+                    let newItem = document.createElement('div');
+                    newItem.className += "module";
+                    newItem.id = actualObject[i].name;
+
+                    let itemImage = document.createElement('img');
+                    itemImage.src = actualObject[i].url;
+
+                    let itemTitle = document.createElement('h3');
+                    itemTitle.innerHTML = actualObject[i].name;
+
+                    let itemCategory = document.createElement('p');
+                    itemCategory.innerHTML = actualObject[i].category;
+
+                    let itemPrice = document.createElement('p');
+                    itemPrice.innerHTML = actualObject[i].cost;
+
+                    newItem.appendChild(itemImage);
+                    newItem.appendChild(itemTitle);
+                    newItem.appendChild(itemCategory);
+                    newItem.appendChild(itemPrice);
+
+                    const putHere = document.querySelector('#modulesGoHere');
+                    putHere.appendChild(newItem);
+                }
+            }
+        }
 
         const requestUpdate = (e, totalPage) => {
             console.log('request update called');
@@ -67,41 +102,42 @@
             const doMethod = e.target.getAttribute('method');
 
             // non dropdown inputs
-            const urlField = document.querySelector('#urlField').value;
+            const urlField = totalPage.querySelector('#urlField').value;
+
             const nameField = document.querySelector('#nameField').value;
             const costField = document.querySelector('#costField').value;
-
-            // dropdown for sorting
-            const sortBy = document.querySelector('#sortBy').value;
-
             // dropdown for initial picking category
             const selectCategory = document.querySelector('#selectCategory').value;
 
-            const xhr = new XMLHttpRequest();
+            // dropdown for sorting
+            //const sortBy = document.querySelector('#sortBy').value;
 
-            xhr.open(doAction, doMethod);
+            if (doMethod === 'POST') {
+                const xhr = new XMLHttpRequest();
 
-            // ok do picture stuff like in here somehow . good luck
-            if (doAction === '/addUserItem') {
+                xhr.open(doMethod, doAction);
                 xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
                 xhr.setRequestHeader('Accept', 'application/json');
 
                 const formData = `name=${nameField}&cost=${costField}&category=${selectCategory}&url=${urlField}`;
-                console.log(formData);
 
                 xhr.send(formData);
                 console.log('sent post request');
-            } else {
-                xhr.setRequestHeader('Content-type', 'application/json');
-                xhr.setRequestHeader('Accept', 'application/json');
-                xhr.send();
-                console.log('sent');
+
+                //xhr.onload = () => handleResponse(xhr);
+
             }
+            //get stuff
+            const xhrGet = new XMLHttpRequest();
 
+            xhrGet.open('GET', '/getUserClosets');
+            xhrGet.setRequestHeader('Content-type', 'application/json');
+            xhrGet.setRequestHeader('Accept', 'application/json');
+            xhrGet.send();
+            console.log('sent');
 
-            xhr.onload = () => handleResponse(xhr);
-
+            xhrGet.onload = () => handleResponse(xhrGet);
 
             e.preventDefault();
             // prevents DOM event bubbling
@@ -111,14 +147,14 @@
         const init = () => {
             const totalPage = document.querySelector('#totalPage');
             const addForm = document.querySelector('#addForm');
-            const sortForm = document.querySelector('#sortForm');
+            //const sortForm = document.querySelector('#sortForm');
 
             console.log('init');
             const getResponses = (e) => requestUpdate(e, totalPage);
 
             // event listeners for the submit button and add button
             addForm.addEventListener('submit', getResponses);
-            sortForm.addEventListener('submit', getResponses);
+            //sortForm.addEventListener('submit', getResponses);
         };
 
         window.onload = init;
@@ -129,7 +165,7 @@
         <!--menu/form for sorting all the stuff bruhaps-->
         <!--honestly this will probably just be a bunch of buttons and maybe a dropdown 100 100 100-->
         <h3>Return categories</h3>
-        <form id="sortForm" action="/getUserClosets" method="GET">
+        <!-- <form id="sortForm" action="/getUserClosets" method="GET">
             <select name="sortBy" id="sortBy">
                 <option value="tops">Tops</option>
                 <option value="bottoms">Bottoms</option>
@@ -139,14 +175,14 @@
                 <option value="outerwear">Outerwear</option>
             </select>
             <input type="submit" value="Sort" />
-        </form>
+        </form> -->
         <!--menu/form to add things-->
         <h3>Add Item</h3>
         <form id="addForm" action="/addUserItem" method="POST">
             <!--event listener here :)-->
             <input id="urlField" type="text" name="imgUrl" placeholder="Image URL">
             <label for="name">Name: </label>
-            <input id="nameField" type="text" name="name" />
+            <input id="nameField" type="text" name="name" placeholder="Item name" />
             <label for="cost">Cost: </label>
             <input id="costField" type="number" name="cost" min="0" max="1000" step="1" />
             <select name="selectCategory" id="selectCategory">
@@ -161,7 +197,8 @@
         </form>
     </div>
 
-    <div id="content"></div>
+    <p id="content"></p>
+    <div id="modulesGoHere"></div>
 
 
 

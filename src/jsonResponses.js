@@ -7,9 +7,9 @@ const respondJSON = (request, response, status, object) => {
   response.end();
 };
 
-const respondJSONMeta = (request, response, status, type) => {
+const respondJSONMeta = (request, response, status) => {
   const headers = {
-    'Content-Type': type,
+    'Content-Type': 'application/json'
   };
 
   response.writeHead(status, headers);
@@ -21,22 +21,15 @@ const success = (request, response) => {
     message: 'This is a successful response',
   };
 
-  respondJSON(request, response, 200, responseJSON);
+  return respondJSON(request, response, 200, responseJSON);
 };
 
-const getSuccessMeta = (request, response, type) => respondJSONMeta(request, response, 200, type);
+const getSuccessMeta = (request, response) => respondJSONMeta(request, response, 200);
 
-const badRequest = (request, response, params) => {
+const badRequest = (request, response) => {
   const responseJSON = {
     message: 'This request has the required parameters',
   };
-
-  if (!params.valid || params.valid !== 'true') {
-    responseJSON.message = 'Missing valid query parameter set to true';
-    responseJSON.id = 'badRequest';
-    return respondJSON(request, response, 400, responseJSON);
-  }
-
   return respondJSON(request, response, 200, responseJSON);
 };
 
@@ -46,7 +39,7 @@ const notFound = (request, response) => {
     id: 'notFound',
   };
 
-  respondJSON(request, response, 404, responseJSON);
+  return respondJSON(request, response, 404, responseJSON);
 };
 
 const getUserClosets = (request, response) => {
@@ -57,13 +50,15 @@ const getUserClosets = (request, response) => {
 
   respondJSON(request, response, 200, responseJSON);
 };
+const getUserClosetsMeta = (request, response) => respondJSONMeta(request, response, 200);
+
 
 const addUserItem = (request, response, body) => {
   const responseJSON = {
     message: 'image, name, and cost are required!!',
   };
 
-  if (!body.name || !body.cost) {
+  if (!body.name || !body.cost || !body.category || !body.url) {
     respondJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);
   }
@@ -89,10 +84,10 @@ const addUserItem = (request, response, body) => {
 
   console.log('added');
 
-  return respondJSONMeta(request, response, responseCode);
+  respondJSONMeta(request, response, responseCode);
 };
 
-const addItemMeta = (request, response, type) => respondJSONMeta(request, response, 200, type);
+const addItemMeta = (request, response) => respondJSONMeta(request, response, 200);
 
 
 const notReal = (request, response) => {
@@ -102,7 +97,7 @@ const notReal = (request, response) => {
     id: 'notFound',
   };
 
-  respondJSON(request, response, 200, responseJSON);
+  return respondJSON(request, response, 200, responseJSON);
 };
 
 
@@ -111,6 +106,7 @@ module.exports = {
   badRequest,
   notFound,
   getUserClosets,
+  getUserClosetsMeta,
   addUserItem,
   addItemMeta,
   notReal,

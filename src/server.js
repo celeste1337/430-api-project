@@ -25,7 +25,7 @@ const urlStruct = {
   },
   HEAD: {
     // these should all be meta ones! bc no message :)
-    '/getUsers': jsonHandler.getUsersMeta,
+    '/getUserClosetsMeta': jsonHandler.getUsersMeta,
     '/notReal': jsonHandler.notRealMeta,
     notFound: jsonHandler.notFoundMeta,
   },
@@ -56,13 +56,12 @@ const handlePost = (request, response) => {
 
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
-  const params = parsedUrl.query;
-  console.log(params);
+  //console.log(params);
 
   if (request.method === 'POST' && parsedUrl.pathname === '/addUserItem') {
     handlePost(request, response, parsedUrl);
   } else if (urlStruct[request.method][parsedUrl.pathname]) {
-    urlStruct[request.method][parsedUrl.pathname](request, response, params);
+    urlStruct[request.method][parsedUrl.pathname](request, response);
   } else {
     urlStruct.GET.notFound(request, response);
   }
