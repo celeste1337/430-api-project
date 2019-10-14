@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="/style.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato|Playfair+Display&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -72,7 +73,7 @@
                     itemCategory.innerHTML = actualObject[i].category;
 
                     let itemPrice = document.createElement('p');
-                    itemPrice.innerHTML = actualObject[i].cost;
+                    itemPrice.innerHTML = "$" + actualObject[i].cost;
 
                     newItem.appendChild(itemImage);
                     newItem.appendChild(itemTitle);
@@ -167,9 +168,10 @@
             <input type="submit" value="Sort" />
         </form> -->
         <!--menu/form to add things-->
-        <h3>Add Item</h3>
+        
         <form id="addForm" action="/addUserItem" method="POST">
-            <!--event listener here :)-->
+            <h3>Add Item</h3>
+            <label for="imgUrl">Image URL</label>
             <input id="urlField" type="text" name="imgUrl" placeholder="Image URL">
             <label for="name">Name: </label>
             <input id="nameField" type="text" name="name" placeholder="Item name" />

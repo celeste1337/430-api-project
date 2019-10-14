@@ -1,0 +1,78 @@
+/*resetti*/
+* {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+/*doc structure*/
+body {
+}
+
+#modulesGoHere {
+    background-color: white;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+/*headings, general text*/
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Playfair Display', serif;
+    color: rgb(26, 40, 77);
+}
+
+h1 {
+    padding: 2%;
+}
+
+p {
+    font-family: 'Lato', sans-serif;
+}
+
+/*headings, general text*/
+#addForm {
+    background-color: black;
+    color: white;
+    margin: 0 0 2% 0;
+    padding: 10% 5%;
+}
+
+#addForm h3{
+    font-size: 3em;
+    color: whitesmoke;
+}
+
+#addForm input, select {
+    width: 300px;
+    height: 20px;
+    margin: 10px 15px;
+    border-radius: 2px;
+}
+
+#addForm label {
+    margin: 0;
+    padding: 0;
+    font-family: 'Lato', sans-serif;
+}
+
+#addForm input[type=submit] {
+    width: 100px;
+}
+
+/*modules*/
+.module {
+    background-color: white;
+    border: 1px solid darkblue;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 1%;
+    width: 1fr;
+    height: 1fr;
+}
+
+.module:hover {
+    -webkit-box-shadow: 0px 0px 20px -6px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 20px -6px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 20px -6px rgba(0,0,0,0.75);
+}
