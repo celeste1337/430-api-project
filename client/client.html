@@ -19,31 +19,22 @@
 
             switch (xhr.status) {
                 case 200:
-                    content.innerHTML = '<b>success</b>';
+                    content.innerHTML = '<b>Success!</b>';
                     break;
                 case 201:
-                    content.innerHTML = '<b>created</b>';
+                    content.innerHTML = '<b>Created!</b>';
                     break;
                 case 400:
-                    content.innerHTML = '<b>bad request</b>';
+                    content.innerHTML = '<b>Bad request.</b>';
                     break;
                 case 404:
-                    content.innerHTML = '<b>not found quirky gorl</b>';
+                    content.innerHTML = '<b>Something was not found.</b>';
                     break;
-                case 401:
-                    content.innerHTML = '<b>unauthorized .</b>';
-                    break;
-                case 403:
-                    content.innerHTML = '<b>FORBIDDEN</b>';
-                    break;
-                case 500:
-                    content.innerHTML = '<b>internal error <3</b>';
-                    break;
-                case 501:
-                    content.innerHTML = '<b>not implemeneted :)</b>';
+                case 204:
+                    content.innerHTML = '<b>No content!</b>';
                     break;
                 default:
-                    content.innerHTML = '<b>we didnt implement this sozzz</b>';
+                    content.innerHTML = '<b>This was not implemented sorry!!</b>';
                     break;
             }
 
@@ -161,10 +152,9 @@
 
     </script>
     <div id="totalPage">
-        <h1>hi celeste</h1>
+        <h1>Closet Manager</h1>
         <!--menu/form for sorting all the stuff bruhaps-->
         <!--honestly this will probably just be a bunch of buttons and maybe a dropdown 100 100 100-->
-        <h3>Return categories</h3>
         <!-- <form id="sortForm" action="/getUserClosets" method="GET">
             <select name="sortBy" id="sortBy">
                 <option value="tops">Tops</option>
