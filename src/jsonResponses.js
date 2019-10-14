@@ -24,7 +24,6 @@ const success = (request, response) => {
   return respondJSON(request, response, 200, responseJSON);
 };
 
-const getSuccessMeta = (request, response) => respondJSONMeta(request, response, 200);
 
 const badRequest = (request, response) => {
   const responseJSON = {
@@ -84,7 +83,7 @@ const addUserItem = (request, response, body) => {
 
   console.log('added');
 
-  respondJSONMeta(request, response, responseCode);
+  return respondJSONMeta(request, response, responseCode);
 };
 
 const addItemMeta = (request, response) => respondJSONMeta(request, response, 200);
